@@ -39,8 +39,14 @@ namespace FriceEngine
 		public double Height { get; set; } = 768;
 		public bool LoseFocusChangeColor = false;
 	    public bool GameStarted { get; }
+	    public string Title
+        {
+	        get => _window.Title;
+	        set => _window.Title = value;
+	    }
 
-		public readonly Random Random;
+	    public WpfWindow Window => _window;
+	    public readonly Random Random;
 		internal QuadTree Tree;
 		internal IEnumerable<PhysicalObject> ExistingPhysicalObjects;
 
@@ -53,6 +59,7 @@ namespace FriceEngine
 			{
 				CustomDrawAction = CustomDraw
 			};
+		    _window.Loaded += (s, e) => { OnLastInit();};
 			_window.Closing += (s, e) => { OnExit(); };
 			_window.MouseDown += (s, e) =>
 			{
@@ -125,6 +132,10 @@ namespace FriceEngine
 		public virtual void OnInit()
 		{
 		}
+
+	    public virtual void OnLastInit()
+	    {
+	    }
 
 		public virtual void OnRefresh()
 		{
@@ -208,6 +219,7 @@ namespace FriceEngine
 		}
 	}
 
+	/// <inheritdoc />
 	/// <summary>
 	/// base window class
 	/// </summary>

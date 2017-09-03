@@ -105,7 +105,7 @@ namespace FriceEngine.Object
 		{
 		    foreach (var i in MoveList.Keys)
 		    {
-		        MoveList.TryGetValue(i, out MoveAnim ma);
+		        MoveList.TryGetValue(i, out var ma);
 		        if (ma != null) Move(ma.Delta);
             }
         }
@@ -151,17 +151,10 @@ namespace FriceEngine.Object
 		/// </summary>
 		/// <param name="other">the other collide box</param>
 		/// <returns>collided or not.</returns>
-		public override bool IsCollide(ICollideBox other)
-		{
-			if (other is PhysicalObject o)
-				return X + Width >= o.X && o.Y <= Y + Height &&
-				       X <= o.X + o.Width &&
-				       Y <= o.Y + o.Height;
-			return false;
-		}
+		public override bool IsCollide(ICollideBox other) => other is PhysicalObject o && X + Width >= o.X && o.Y <= Y + Height && X <= o.X + o.Width && Y <= o.Y + o.Height;
 
-		public bool ContainsPoint(double px, double py) => (px >= X && px <= X + Width && py >= Y && py <= Y + Height);
-		public bool ContainsPoint(int px, int py) => (px >= X && px <= X + Width && py >= Y && py <= Y + Height);
+	    public bool ContainsPoint(double px, double py) => px >= X && px <= X + Width && py >= Y && py <= Y + Height;
+		public bool ContainsPoint(int px, int py) => px >= X && px <= X + Width && py >= Y && py <= Y + Height;
 	}
 
 	public sealed class ShapeObject : FObject
