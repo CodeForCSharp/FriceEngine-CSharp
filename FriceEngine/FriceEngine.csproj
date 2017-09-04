@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -63,6 +66,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\FResource.cs" />
     <Compile Include="Resource\Managers.cs" />
+    <Compile Include="Utils\Data\IDatabase.cs" />
+    <Compile Include="Utils\Data\JsonPreference.cs" />
     <Compile Include="Utils\File\FileUtils.cs" />
     <Compile Include="Utils\Graphics\ColorUtils.cs" />
     <Compile Include="Utils\Graphics\FShape.cs" />
@@ -82,6 +87,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

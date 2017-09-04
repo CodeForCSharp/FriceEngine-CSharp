@@ -44,7 +44,7 @@ namespace FriceEngineTest
 			ShowFps = true;
 			AddObject(ImageObject.FromFile("back.png", 0, 0));
 			Height = 500;
-			Width = 400;
+			Width = 500;
 			_bird = ImageObject.FromFile("an.png", 20, 300);
 			_score = new TextObject(ColorResource.Black,
 				"Click to jump.", 16, 10, 20);
@@ -131,28 +131,28 @@ namespace FriceEngineTest
 		{
 			SetSize(500, 600);
 			var t = new FTimer(1500);
-			t.Start(() =>
+		    _objects = new[]
+		    {
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), 0, Height),
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 4, Height),
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 2, Height),
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width * 3 / 4, Height),
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), 0, Height),
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 4, Height),
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 2, Height),
+		        new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width * 3 / 4, Height)
+		    };
+		    _objects.ForEach(o =>
+		    {
+		        o.AddAnims(new SimpleMove(0, 250));
+		        AddObject(o);
+		    });
+            t.Start(() =>
 			{
 				var a = Random.Next(_objects.Length);
 				while (_objects[a].Y < Height) a = Random.Next(_objects.Length);
 				_objects[a].ColorResource = ColorResource.Black;
 				_objects[a].Y = ShitShit;
-			});
-			_objects = new[]
-			{
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), 0, Height),
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 4, Height),
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 2, Height),
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width * 3 / 4, Height),
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), 0, Height),
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 4, Height),
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width / 2, Height),
-				new ShapeObject(ColorResource.Black, new FRectangle(Width / 4, Height / 6), Width * 3 / 4, Height)
-			};
-			_objects.ForEach(o =>
-			{
-				o.AddAnims(new SimpleMove(0, 250));
-				AddObject(o);
 			});
 		}
 

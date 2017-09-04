@@ -299,7 +299,7 @@ namespace FriceEngine.Object
 		/// <returns></returns>
 		public static ImageObject FromFile(string path, double x, double y, int width = -1, int height = -1)
 		{
-			var img = new ImageObject(ImageResource.FromFile(path), x, y);
+			var img = new ImageObject(ImageResource.FromPath(path), x, y);
 			if (width > 0) img.Width = width;
 			if (height > 0) img.Height = height;
 			return img;

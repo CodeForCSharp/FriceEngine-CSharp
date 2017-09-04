@@ -5,9 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using FriceEngine.Object;
 using FriceEngine.Utils.Graphics;
 using FriceEngine.Utils.Misc;
@@ -35,9 +37,29 @@ namespace FriceEngine
 		    set => _window.ShowFps = value;
 		}
 
-		public double Width { get; set; } = 1024;
-		public double Height { get; set; } = 768;
-		public bool LoseFocusChangeColor = false;
+	    private double _width = 1024;
+		public double Width
+		{
+		    get => _width;
+		    set
+		    {
+		        _width = value;
+		        _window.Width = value;
+		    }
+		}
+
+	    private double _height = 768;
+	    public double Height
+	    {
+	        get => _height;
+	        set
+	        {
+	            _height = value;
+	            _window.Height = value;
+	        }
+	    }
+
+	    public bool LoseFocusChangeColor = false;
 	    public bool GameStarted { get; }
 	    public string Title
         {
@@ -53,13 +75,13 @@ namespace FriceEngine
 		protected WpfGame()
 		{
 			Random = new Random(DateTime.Now.Millisecond);
-			_init();
-			Tree = new QuadTree(new System.Drawing.Rectangle(0, 0, (int) Width, (int) Height));
-			_window = new WpfWindow(Width, Height)
-			{
-				CustomDrawAction = CustomDraw
-			};
-		    _window.Loaded += (s, e) => { OnLastInit();};
+		    _window = new WpfWindow(Width, Height)
+		    {
+		        CustomDrawAction = CustomDraw
+		    };
+		    _init();
+		    Tree = new QuadTree(new System.Drawing.Rectangle(0, 0, (int)Width, (int)Height));
+            _window.Loaded += (s, e) => { OnLastInit();};
 			_window.Closing += (s, e) => { OnExit(); };
 			_window.MouseDown += (s, e) =>
 			{
@@ -177,6 +199,11 @@ namespace FriceEngine
 		{
 		}
 
+	    public void AddKeyListener(Action<Key> typed = null, Action<Key> pressed = null, Action<Key> released = null)
+	    {
+	        _window.KeyDown += (s, e) => { pressed?.Invoke(e.Key); };
+	        _window.KeyUp += (s, e) => { released?.Invoke(e.Key); };
+	    }
 		public void AddObject(params IAbstractObject[] obj) => obj.ForEach(_buffer.Add);
 		public void RemoveObject(params IAbstractObject[] obj) => obj.ForEach(i => _buffer.Remove(i));
 		public void AddTimeListener(params FTimeListener[] obj) => obj.ForEach(_fTimeListeners.Add);
@@ -320,7 +347,7 @@ namespace FriceEngine
 			FrameworkElement element = null;
 			if (obj is ShapeObject shape)
 			{
-				var brush = new SolidColorBrush(((ShapeObject) obj).ColorResource.Color.ToMediaColor());
+				var brush = new SolidColorBrush(shape.ColorResource.Color.ToMediaColor());
 				if (shape.Shape is FRectangle)
 				{
 					element = new Rectangle

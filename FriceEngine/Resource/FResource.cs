@@ -27,8 +27,7 @@ namespace FriceEngine.Resource
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is ColorResource)) return false;
-			return ((ColorResource) obj).Color.Equals(Color);
+		    return obj is ColorResource res && res.Color.Equals(Color);
 		}
 
 		public bool Equals(ColorResource other) => Color.Equals(other.Color);
@@ -96,15 +95,16 @@ namespace FriceEngine.Resource
 		private ImageResource()
 		{
 		}
-
-		public static ImageResource FromFile(string path) => new ImageResource(path);
+        public static ImageResource FromUrl(string url) => new WebImageResource(url);
+		public static ImageResource FromPath(string path) => new ImageResource(path);
 		public static ImageResource Empty() => new ImageResource();
 	}
 
 	public sealed class WebImageResource : ImageResource
 	{
-		public WebImageResource(string path) : base(WebImageManger.Instance[path])
+		public WebImageResource(string url) : base(WebImageManger.Instance[url])
 		{
+
 		}
 	}
 }
