@@ -11,7 +11,7 @@ Visual Studio really inspried me. Very exciting IDE.
 
 CI|status
 :---|:---:
-AppVeyor|[![Build status](https://ci.appveyor.com/api/projects/status/uabdcqj2dnsod224?svg=true)](https://ci.appveyor.com/project/CodeForCSharp/friceengine-csharp)
+AppVeyor|[![Build status](https://ci.appveyor.com/api/projects/status/jj6ka9g2ow25h5hh?svg=true](https://ci.appveyor.com/project/CodeForCSharp/friceengine-csharp)
 
 ## Contributors
 
