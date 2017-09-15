@@ -37,8 +37,6 @@ namespace FriceEngine
 			get => _window.ShowFps;
 			set => _window.ShowFps = value;
 		}
-
-<<<<<<< HEAD
 	    private double _width = 1024;
 		public double Width
 		{
@@ -70,19 +68,9 @@ namespace FriceEngine
 	    }
 
 	    public WpfWindow Window => _window;
-	    public readonly Random Random;
-		internal QuadTree Tree;
-		internal IEnumerable<PhysicalObject> ExistingPhysicalObjects;
-=======
-		public double Width { get; set; } = 1024;
-		public double Height { get; set; } = 768;
-		public bool LoseFocusChangeColor = false;
-		public bool GameStarted { get; }
-
 		[NotNull] public readonly Random Random;
 		[NotNull] internal QuadTree Tree;
 		[NotNull] internal IEnumerable<PhysicalObject> ExistingPhysicalObjects;
->>>>>>> pr/1
 
 		protected WpfGame()
 		{
@@ -211,22 +199,15 @@ namespace FriceEngine
 		{
 		}
 
-<<<<<<< HEAD
 	    public void AddKeyListener(Action<Key> typed = null, Action<Key> pressed = null, Action<Key> released = null)
 	    {
 	        _window.KeyDown += (s, e) => { pressed?.Invoke(e.Key); };
 	        _window.KeyUp += (s, e) => { released?.Invoke(e.Key); };
 	    }
-		public void AddObject(params IAbstractObject[] obj) => obj.ForEach(_buffer.Add);
-		public void RemoveObject(params IAbstractObject[] obj) => obj.ForEach(i => _buffer.Remove(i));
-		public void AddTimeListener(params FTimeListener[] obj) => obj.ForEach(_fTimeListeners.Add);
-		public void RemoveTimeListener(params FTimeListener[] obj) => obj.ForEach(i => _fTimeListeners.Remove(i));
-=======
 		public void AddObject([NotNull] params IAbstractObject[] obj) => obj.ForEach(_buffer.Add);
 		public void RemoveObject([NotNull] params IAbstractObject[] obj) => obj.ForEach(i => _buffer.Remove(i));
 		public void AddTimeListener([NotNull] params FTimeListener[] obj) => obj.ForEach(_fTimeListeners.Add);
 		public void RemoveTimeListener([NotNull] params FTimeListener[] obj) => obj.ForEach(i => _fTimeListeners.Remove(i));
->>>>>>> pr/1
 
 //		public void SetCursor(ImageResource img)
 //		{
@@ -403,7 +384,7 @@ namespace FriceEngine
 					Width = button.Width
 				};
 				var buttonElement = (Button) element;
-				buttonElement.Content = button.Image == null ? button.Text : button.Image.Bitmap.ToImage();
+				buttonElement.Content = button.Image?.Bitmap.ToImage() ?? (object)button.Text;
 
 				if (button.OnClick != null) buttonElement.Click += (s, e) => button.OnClick(button.Name);
 				if (button.OnMouseEnter != null) buttonElement.Click += (s, e) => button.OnMouseEnter(button.Name);

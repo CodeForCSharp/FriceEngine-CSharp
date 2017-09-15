@@ -96,15 +96,9 @@ namespace FriceEngine.Resource
 				? WebImageManger.Instance[path]
 				: ImageManger.Instance[path];
 		}
-<<<<<<< HEAD
-        public static ImageResource FromUrl(string url) => new WebImageResource(url);
-		public static ImageResource FromPath(string path) => new ImageResource(path);
-		public static ImageResource Empty() => new ImageResource();
-=======
-
-		[NotNull]
-		public static ImageResource FromFile([NotNull] string path) => new ImageResource(path);
->>>>>>> pr/1
+        public static ImageResource FromUrl([NotNull]string url) => new WebImageResource(url);
+		public static ImageResource FromPath([NotNull]string path) => new ImageResource(path);
+		//public static ImageResource Empty() => new ImageResource();
 	}
 
 	public sealed class WebImageResource : ImageResource

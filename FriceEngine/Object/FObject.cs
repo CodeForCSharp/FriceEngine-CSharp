@@ -113,21 +113,12 @@ namespace FriceEngine.Object
 		/// </summary>
 		public void RunAnims()
 		{
-<<<<<<< HEAD
 		    foreach (var i in MoveList.Keys)
 		    {
 		        MoveList.TryGetValue(i, out var ma);
 		        if (ma != null) Move(ma.Delta);
             }
         }
-=======
-			foreach (var i in MoveList.Keys)
-			{
-				MoveList.TryGetValue(i, out MoveAnim ma);
-				if (ma != null) Move(ma.Delta);
-			}
-		}
->>>>>>> pr/1
 
 		/// <summary>
 		/// Add animations
