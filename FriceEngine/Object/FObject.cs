@@ -9,6 +9,7 @@ using FriceEngine.Animation;
 using FriceEngine.Resource;
 using FriceEngine.Utils.Graphics;
 using FriceEngine.Utils.Misc;
+using JetBrains.Annotations;
 
 namespace FriceEngine.Object
 {
@@ -42,7 +43,7 @@ namespace FriceEngine.Object
 
 	public interface ICollideBox
 	{
-		bool IsCollide(ICollideBox other);
+		bool IsCollide([NotNull] ICollideBox other);
 	}
 
 	public abstract class PhysicalObject : IAbstractObject, IFContainer, ICollideBox
@@ -51,18 +52,23 @@ namespace FriceEngine.Object
 		public virtual double Y { get; set; }
 		public virtual double Width { get; set; }
 		public virtual double Height { get; set; }
+
+		[CanBeNull]
 		public virtual event EventHandler<OnCollosionEventArgs> Collision;
+
 		public abstract int Uid { get; }
 		public double Rotate { get; set; } = 0;
 		public bool Died { get; set; }
-		public abstract bool IsCollide(ICollideBox other);
+		public abstract bool IsCollide([NotNull] ICollideBox other);
 		private double _mass = 1;
+
+		[NotNull]
 		public DoublePair Centre => new DoublePair(X + 0.5 * Width, Y + 0.5 * Height);
 
 		public double Mass
 		{
 			get => _mass;
-		    set => _mass = value <= 0 ? 0.001 : value;
+			set => _mass = value <= 0 ? 0.001 : value;
 		}
 
 		public void SetCentre(double x, double y)
@@ -71,7 +77,7 @@ namespace FriceEngine.Object
 			Y = y - Height / 2;
 		}
 
-		public void OnCollision(OnCollosionEventArgs e)
+		public void OnCollision([NotNull] OnCollosionEventArgs e)
 		{
 			var temp = Collision;
 			temp?.Invoke(this, e);
@@ -87,7 +93,11 @@ namespace FriceEngine.Object
 		}
 
 		public override int Uid { get; } = StaticHelper.GetNewUid();
+
+		[NotNull]
 		public ConcurrentDictionary<int, MoveAnim> MoveList { get; }
+
+		[NotNull]
 		public List<Pair<PhysicalObject, Action>> TargetList { get; }
 
 		public void Move(double x, double y)
@@ -96,24 +106,33 @@ namespace FriceEngine.Object
 			Y += y;
 		}
 
-		public void Move(DoublePair p) => Move(p.X, p.Y);
+		public void Move([NotNull] DoublePair p) => Move(p.X, p.Y);
 
 		/// <summary>
 		/// handle all animations
 		/// </summary>
 		public void RunAnims()
 		{
+<<<<<<< HEAD
 		    foreach (var i in MoveList.Keys)
 		    {
 		        MoveList.TryGetValue(i, out var ma);
 		        if (ma != null) Move(ma.Delta);
             }
         }
+=======
+			foreach (var i in MoveList.Keys)
+			{
+				MoveList.TryGetValue(i, out MoveAnim ma);
+				if (ma != null) Move(ma.Delta);
+			}
+		}
+>>>>>>> pr/1
 
 		/// <summary>
 		/// Add animations
 		/// </summary>
-		public void AddAnims(params MoveAnim[] ma)
+		public void AddAnims([NotNull] params MoveAnim[] ma)
 		{
 			foreach (var moveAnim in ma)
 				MoveList.TryAdd(moveAnim.Uid, moveAnim);
@@ -122,12 +141,12 @@ namespace FriceEngine.Object
 		/// <summary>
 		/// Remove animations
 		/// </summary>
-		public void RemoveAnims(params MoveAnim[] ma)
+		public void RemoveAnims([NotNull] params MoveAnim[] ma)
 		{
 			foreach (var moveAnim in ma)
 			{
-                MoveList.TryRemove(moveAnim.Uid, out MoveAnim _);
-            }
+				MoveList.TryRemove(moveAnim.Uid, out MoveAnim _);
+			}
 		}
 
 		/// <summary>
@@ -159,22 +178,26 @@ namespace FriceEngine.Object
 
 	public sealed class ShapeObject : FObject
 	{
-		public IFShape Shape;
+		[NotNull] public IFShape Shape;
 		public ColorResource ColorResource;
 
 		public override double Width
 		{
 			get => Shape.Width;
-		    set => Shape.Width = value;
+			set => Shape.Width = value;
 		}
 
 		public override double Height
 		{
 			get => Shape.Height;
-		    set => Shape.Height = value;
+			set => Shape.Height = value;
 		}
 
-		public ShapeObject(ColorResource colorResource, IFShape shape, double x, double y)
+		public ShapeObject(
+			ColorResource colorResource,
+			[NotNull] IFShape shape,
+			double x,
+			double y)
 		{
 			ColorResource = colorResource;
 			Shape = shape;
@@ -182,12 +205,20 @@ namespace FriceEngine.Object
 			Y = y;
 		}
 
-		public ShapeObject(Color color, IFShape shape, double x, double y) :
+		public ShapeObject(
+			Color color,
+			[NotNull] IFShape shape,
+			double x,
+			double y) :
 			this(new ColorResource(color), shape, x, y)
 		{
 		}
 
-		public ShapeObject(int argb, IFShape shape, double x, double y) :
+		public ShapeObject(
+			int argb,
+			[NotNull] IFShape shape,
+			double x,
+			double y) :
 			this(new ColorResource(argb), shape, x, y)
 		{
 		}
@@ -195,12 +226,14 @@ namespace FriceEngine.Object
 
 	public sealed class ImageObject : FObject
 	{
+		[NotNull]
 		public ImageResource Res { get; set; }
 
+		[NotNull]
 		public Bitmap Bitmap
 		{
-			get => Res.Bitmap;
-		    set => Res.Bitmap = value;
+			[NotNull] get => Res.Bitmap;
+			[NotNull] set => Res.Bitmap = value;
 		}
 
 		public Point Point { get; set; }
@@ -210,7 +243,7 @@ namespace FriceEngine.Object
 		public override double X
 		{
 			get => _x;
-		    set
+			set
 			{
 				_x = value;
 				Point = new Point(Convert.ToInt32(_x), Convert.ToInt32(_y));
@@ -220,7 +253,7 @@ namespace FriceEngine.Object
 		public override double Y
 		{
 			get => _y;
-		    set
+			set
 			{
 				_y = value;
 				Point = new Point(Convert.ToInt32(_x), Convert.ToInt32(_y));
@@ -230,16 +263,16 @@ namespace FriceEngine.Object
 		public override double Height
 		{
 			get => Bitmap.Height;
-		    set => Bitmap = _resize(Bitmap, Convert.ToInt32(Width), Convert.ToInt32(value));
+			set => Bitmap = _resize(Bitmap, Convert.ToInt32(Width), Convert.ToInt32(value));
 		}
 
 		public override double Width
 		{
 			get => Bitmap.Width;
-		    set => Bitmap = _resize(Bitmap, Convert.ToInt32(value), Convert.ToInt32(Height));
+			set => Bitmap = _resize(Bitmap, Convert.ToInt32(value), Convert.ToInt32(Height));
 		}
 
-		public ImageObject(ImageResource img, double x, double y)
+		public ImageObject([NotNull] ImageResource img, double x, double y)
 		{
 			Res = img;
 			_x = x;
@@ -247,16 +280,22 @@ namespace FriceEngine.Object
 			Point = new Point(Convert.ToInt32(_x), Convert.ToInt32(_y));
 		}
 
-		public ImageObject(Bitmap img, double x, double y)
+		public ImageObject([NotNull] Bitmap img, double x, double y)
 		{
-			Res = ImageResource.Empty();
+			Res = new ImageResource(img);
 			Bitmap = img;
 			_x = x;
 			_y = y;
 			Point = new Point(Convert.ToInt32(_x), Convert.ToInt32(_y));
 		}
 
-		public static ImageObject FromWeb(string url, double x, double y, int width = -1, int height = -1)
+		[NotNull]
+		public static ImageObject FromWeb(
+			[NotNull] string url,
+			double x,
+			double y,
+			int width = -1,
+			int height = -1)
 		{
 			var img = new ImageObject(new WebImageResource(url), x, y);
 			if (width > 0) img.Width = width;
@@ -272,7 +311,11 @@ namespace FriceEngine.Object
 		/// <param name="newH">new bitmap height</param>
 		/// <returns>scaled bitmap</returns>
 		/// <author>ifdog</author>
-		private static Bitmap _resize(Image oldBitmap, int newW, int newH)
+		[NotNull]
+		private static Bitmap _resize(
+			[NotNull] Image oldBitmap,
+			int newW,
+			int newH)
 		{
 			var b = new Bitmap(newW, newH);
 			using (var g = Graphics.FromImage(b))
@@ -297,7 +340,13 @@ namespace FriceEngine.Object
 		/// <param name="width">image width, defaultly original size.</param>
 		/// <param name="height">image height, defaultly original size.</param>
 		/// <returns></returns>
-		public static ImageObject FromFile(string path, double x, double y, int width = -1, int height = -1)
+		[NotNull]
+		public static ImageObject FromFile(
+			[NotNull] string path,
+			double x,
+			double y,
+			int width = -1,
+			int height = -1)
 		{
 			var img = new ImageObject(ImageResource.FromPath(path), x, y);
 			if (width > 0) img.Width = width;
@@ -313,35 +362,35 @@ namespace FriceEngine.Object
 //			return img;
 //		}
 
+		[NotNull]
 		public ImageObject Clone() => new ImageObject(Res, X, Y);
 	}
 
 	public class ButtonObject : FObject
 	{
-		public string Text;
-		public ColorResource BackgroundColor;
-		public ColorResource ForegroundColor;
-		public ImageResource Image;
-		public string Name;
-		public Action<string> OnClick;
-		public Action<string> OnMouseEnter;
-		public Action<string> OnMouseLeave;
-
+		[NotNull] public string Text;
+		[NotNull] public ColorResource BackgroundColor;
+		[NotNull] public ColorResource ForegroundColor;
+		[CanBeNull] public ImageResource Image;
+		[NotNull] public string Name;
+		[CanBeNull] public Action<string> OnClick;
+		[CanBeNull] public Action<string> OnMouseEnter;
+		[CanBeNull] public Action<string> OnMouseLeave;
 
 		[SuppressMessage("ReSharper", "VirtualMemberCallInConstructor")]
 		public ButtonObject(
-			string text,
-			string name,
+			[NotNull] string text,
+			[NotNull] string name,
 			double x,
 			double y,
 			double width,
 			double height,
-			ColorResource backgroundColor,
-			ColorResource foregroundColor = null,
-			ImageResource image = null,
-			Action<string> onClick = null,
-			Action<string> onMouseEnter = null,
-			Action<string> onMouseLeave = null)
+			[NotNull] ColorResource backgroundColor,
+			[CanBeNull] ColorResource foregroundColor = null,
+			[CanBeNull] ImageResource image = null,
+			[CanBeNull] Action<string> onClick = null,
+			[CanBeNull] Action<string> onMouseEnter = null,
+			[CanBeNull] Action<string> onMouseLeave = null)
 		{
 			Text = text;
 			Name = name;
@@ -359,7 +408,7 @@ namespace FriceEngine.Object
 	}
 
 
-	public class DoublePair
+	public struct DoublePair
 	{
 		public double X;
 		public double Y;
